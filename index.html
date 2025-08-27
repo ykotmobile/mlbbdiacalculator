@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLBB Smile Coin & Diamond Calculator (Full Summary)</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font for Myanmar language -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Padauk', sans-serif; }
+        .disabled-section { opacity: 0.5; pointer-events: none; }
+        .diamond-btn {
+            position: relative;
+            background-color: #374151; border: 1px solid #4B5563;
+            color: white; padding: 0.5rem; border-radius: 0.5rem;
+            transition: all 0.2s ease-in-out; cursor: pointer;
+            text-align: center; line-height: 1.2;
+        }
+        .diamond-btn:hover { background-color: #4B5563; transform: translateY(-2px); }
+        .diamond-btn .diamond-text { font-weight: bold; font-size: 1rem; }
+        .diamond-btn .coin-text { font-size: 0.75rem; color: #D1D5DB; }
+        .selection-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #EF4444; /* red-500 */
+            color: white;
+            border-radius: 9999px;
+            width: 24px;
+            height: 24px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 2px solid #1F2937; /* bg-gray-800 */
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 0.375rem;
+            margin-bottom: 0.5rem;
+        }
+        .remove-btn {
+            background-color: #DC2626; /* red-600 */
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            width: 20px;
+            height: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-md mx-auto space-y-8">
+        <!-- Step 1: Smile Coin Rate Calculator -->
+        <div class="bg-gray-800 p-6 md:p-8 rounded-2xl shadow-2xl border border-gray-700">
+            <div class="text-center mb-6">
+                <h1 class="text-xl font-bold text-yellow-400">အဆင့် (၁) - Smile Coin စျေးနှုန်းတွက်ရန်</h1>
+                <p class="text-gray-400 text-sm mt-1">Coin တစ်ခု၏ တန်ဖိုးကို ရှာပါ</p>
+            </div>
+            <div class="mb-4">
+                <label for="coinPurchasePrice" class="block mb-2 text-sm font-medium text-gray-300">Coin ဝယ်ယူသည့်စျေးနှုန်း (ကျပ်)</label>
+                <input type="number" id="coinPurchasePrice" class="bg-gray-700 border border-gray-600 text-white text-md rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-3" placeholder="ဥပမာ: 10000">
+            </div>
+            <div class="mb-5">
+                <label for="numberOfCoins" class="block mb-2 text-sm font-medium text-gray-300">ရရှိသော Coin အရေအတွက်</label>
+                <input type="number" id="numberOfCoins" class="bg-gray-700 border border-gray-600 text-white text-md rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-3" placeholder="ဥပမာ: 340">
+            </div>
+            <button id="calculateCoinRateBtn" class="w-full bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-800 font-bold rounded-lg text-md px-5 py-3 text-center transition-transform transform hover:scale-105">1 Coin စျေးနှုန်းတွက်မည်</button>
+            <div id="coinRateResult" class="mt-6 text-center bg-gray-900/50 p-4 rounded-lg hidden border border-gray-700">
+                <p id="coinRateText" class="text-xl font-bold text-green-400"></p>
+            </div>
+        </div>
+
+        <!-- Step 2: Diamond Price Calculator with Buttons -->
+        <div id="diamondCalculatorSection" class="bg-gray-800 p-6 md:p-8 rounded-2xl shadow-2xl border border-gray-700 disabled-section">
+             <div class="text-center mb-6">
+                <h1 class="text-xl font-bold text-yellow-400">အဆင့် (၂) - Diamond စျေးနှုန်းတွက်ရန်</h1>
+                <p id="rateMessage" class="text-gray-400 text-sm mt-1">အရင်ဆုံး Coin စျေးနှုန်းကို တွက်ချက်ပါ</p>
+            </div>
+            <div class="mb-5">
+                <label class="block mb-3 text-sm font-medium text-center text-gray-300">Diamond ပမာဏကို ရွေးပါ (ထပ်နှိပ်၍ ပေါင်းနိုင်သည်)</label>
+                <div id="diamondOptions" class="grid grid-cols-3 gap-3">
+                    <button class="diamond-btn" data-id="50" data-diamond-display="100 Diamonds 2x" data-coin-cost="39"><span class="diamond-text">50+50</span><br><span class="coin-text">39 Coins</span></button>
+<button class="diamond-btn" data-id="150" data-diamond-display="300 Diamonds 2x" data-coin-cost="115.9"><span class="diamond-text">150+150</span><br><span class="coin-text">116.9 Coins</span></button>
+<button class="diamond-btn" data-id="250" data-diamond-display="500 Diamonds 2x" data-coin-cost="187.5"><span class="diamond-text">250+250</span><br><span class="coin-text">187.5 Coins</span></button>
+<button class="diamond-btn" data-id="500" data-diamond-display="1000 Diamonds 2x" data-coin-cost="385"><span class="diamond-text">500+500</span><br><span class="coin-text">385 Coins</span></button>
+<button class="diamond-btn" data-id="86" data-diamond-display="86 Diamonds" data-coin-cost="61.5"><span class="diamond-text">86</span><br><span class="coin-text">61.5 Coins</span></button>
+<button class="diamond-btn" data-id="172" data-diamond-display="172 Diamonds" data-coin-cost="122"><span class="diamond-text">172</span><br><span class="coin-text">122 Coins</span></button>
+<button class="diamond-btn" data-id="257" data-diamond-display="257 Diamonds" data-coin-cost="177.5"><span class="diamond-text">257</span><br><span class="coin-text">177.5 Coins</span></button>
+<button class="diamond-btn" data-id="706" data-diamond-display="706" data-coin-cost="480"><span class="diamond-text">706</span><br><span class="coin-text">480 Coins</span></button>
+<button class="diamond-btn" data-id="2195" data-diamond-display="2195 Diamonds" data-coin-cost="1453"><span class="diamond-text">2195</span><br><span class="coin-text">1453 Coins</span></button>
+<button class="diamond-btn" data-id="3688" data-diamond-display="3688 Diamonds" data-coin-cost="2424"><span class="diamond-text">3688</span><br><span class="coin-text">2424 Coins</span></button>
+<button class="diamond-btn" data-id="5532" data-diamond-display="5532 Diamonds" data-coin-cost="3660"><span class="diamond-text">5532</span><br><span class="coin-text">3660 Coins</span></button>
+<button class="diamond-btn" data-id="9288" data-diamond-display="9288 Diamonds" data-coin-cost="6079"><span class="diamond-text">9288</span><br><span class="coin-text">6079 Coins</span></button>
+<button class="diamond-btn" data-id="weeklypass" data-diamond-display="1weeklypass Diamonds" data-coin-cost="76"><span class="diamond-text">weekly pass</span><br><span class="coin-text">76 Coins</span></button>
+<button class="diamond-btn" data-id="10weeklypass" data-diamond-display="10weeklypass Diamonds" data-coin-cost="760"><span class="diamond-text">10 WP</span><br><span class="coin-text">760 Coins</span></button>
+<button class="diamond-btn" data-id="TwilightPassage" data-diamond-display="TwilightPassage" data-coin-cost="402.5"><span class="diamond-text">Twilight Passage</span><br><span class="coin-text">402.5 Coins</span></button>
+                </div>
+            </div>
+
+            <div id="finalPriceResult" class="mt-6 text-center bg-gray-900/50 p-4 rounded-lg hidden border border-gray-700">
+                <h2 class="text-lg font-semibold text-yellow-400 mb-3">ရွေးချယ်ထားသော စာရင်း</h2>
+                <div id="summaryList"></div>
+                <!-- NEW: Totals Summary Section -->
+                <div id="totalsSummary" class="border-t border-gray-600 mt-3 pt-3 text-sm text-gray-300 space-y-1 text-left">
+                    <div class="flex justify-between">
+                        <span>စုစုပေါင်း Diamonds:</span>
+                        <span id="totalDiamondsText" class="font-semibold">0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>စုစုပေါင်း Coins:</span>
+                        <span id="totalCoinsText" class="font-semibold">0</span>
+                    </div>
+                </div>
+                <div class="border-t border-gray-600 mt-3 pt-3">
+                    <p class="text-lg font-semibold text-yellow-400">စုစုပေါင်း ကျသင့်ငွေ</p>
+                    <p id="finalPriceText" class="text-3xl font-bold mt-1 text-cyan-400"></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contact Buttons Section -->
+        <div class="bg-gray-800 p-6 rounded-2xl shadow-2xl border border-gray-700">
+            <h2 class="text-center text-lg font-bold text-yellow-400 mb-4">Smile Coin ဝယ်ယူရန် ဆက်သွယ်ပါ</h2>
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <a href="https://t.me/ykotmobiletopup" target="_blank" rel="noopener noreferrer" class="flex-grow inline-flex items-center justify-center bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-4 rounded-lg transition transform hover:scale-105">Telegram</a>
+                <a href="https://chat.whatsapp.com/Jv1mtUYV2ux8DtLPsC5823?mode=ems_copy_c" target="_blank" rel="noopener noreferrer" class="flex-grow inline-flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg transition transform hover:scale-105">WhatsApp</a>
+                <a href="https://invite.viber.com/?g2=AQA0FnNvbquidFU5X0g7nf4P2Jjidn9UMix2RFWIPVcozwYi1FrudzhGPcUqYUuA" class="flex-grow inline-flex items-center justify-center bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg transition transform hover:scale-105">Viber</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let pricePerCoin = null;
+        const CURRENCY_SYMBOL = 'ကျပ်';
+        let selections = [];
+
+        // DOM Elements
+        const coinPurchasePriceInput = document.getElementById('coinPurchasePrice');
+        const numberOfCoinsInput = document.getElementById('numberOfCoins');
+        const calculateCoinRateBtn = document.getElementById('calculateCoinRateBtn');
+        const coinRateResultDiv = document.getElementById('coinRateResult');
+        const coinRateTextP = document.getElementById('coinRateText');
+        const diamondCalculatorSection = document.getElementById('diamondCalculatorSection');
+        const rateMessageP = document.getElementById('rateMessage');
+        const diamondOptionsContainer = document.getElementById('diamondOptions');
+        const finalPriceResultDiv = document.getElementById('finalPriceResult');
+        const summaryListDiv = document.getElementById('summaryList');
+        const totalDiamondsText = document.getElementById('totalDiamondsText');
+        const totalCoinsText = document.getElementById('totalCoinsText');
+        const finalPriceTextP = document.getElementById('finalPriceText');
+
+        function calculateCoinRate() {
+            const purchasePrice = parseFloat(coinPurchasePriceInput.value);
+            const coinCount = parseInt(numberOfCoinsInput.value);
+
+            if (isNaN(purchasePrice) || isNaN(coinCount) || purchasePrice <= 0 || coinCount <= 0) {
+                coinRateTextP.textContent = 'မှန်ကန်သော ကိန်းဂဏန်းများ ထည့်ပါ';
+                coinRateResultDiv.classList.remove('hidden');
+                pricePerCoin = null; 
+                diamondCalculatorSection.classList.add('disabled-section');
+                selections = [];
+                updateUI();
+                return;
+            }
+
+            pricePerCoin = purchasePrice / coinCount;
+            coinRateTextP.textContent = `1 Coin = ${pricePerCoin.toFixed(4)} ${CURRENCY_SYMBOL}`;
+            coinRateResultDiv.classList.remove('hidden');
+            diamondCalculatorSection.classList.remove('disabled-section');
+            rateMessageP.textContent = `( 1 Coin = ${pricePerCoin.toFixed(4)} ${CURRENCY_SYMBOL} နှုန်းဖြင့် )`;
+            updateUI();
+        }
+
+        function updateUI() {
+            if (pricePerCoin === null) {
+                finalPriceResultDiv.classList.add('hidden');
+                return;
+            }
+
+            summaryListDiv.innerHTML = '';
+            document.querySelectorAll('.selection-badge').forEach(badge => badge.remove());
+            
+            if (selections.length === 0) {
+                finalPriceResultDiv.classList.add('hidden');
+                return;
+            }
+
+            let totalCoinCost = 0;
+            let totalDiamondCount = 0;
+            let hasSpecialItems = false;
+            const groupedSelections = {};
+
+            selections.forEach(item => {
+                totalCoinCost += item.coinCost;
+                const diamondAmount = parseInt(item.diamondDisplay);
+                if (!isNaN(diamondAmount)) {
+                    totalDiamondCount += diamondAmount;
+                } else {
+                    hasSpecialItems = true;
+                }
+
+                if (groupedSelections[item.id]) {
+                    groupedSelections[item.id].count++;
+                } else {
+                    groupedSelections[item.id] = { ...item, count: 1 };
+                }
+            });
+
+            for (const id in groupedSelections) {
+                const item = groupedSelections[id];
+                const summaryItem = document.createElement('div');
+                summaryItem.className = 'summary-item';
+                summaryItem.innerHTML = `
+                    <span>${item.diamondDisplay} (x${item.count})</span>
+                    <button class="remove-btn" data-id="${id}">-</button>
+                `;
+                summaryListDiv.appendChild(summaryItem);
+
+                const button = document.querySelector(`.diamond-btn[data-id="${id}"]`);
+                if (button) {
+                    const badge = document.createElement('span');
+                    badge.className = 'selection-badge';
+                    badge.textContent = item.count;
+                    button.appendChild(badge);
+                }
+            }
+            
+            // Update totals summary
+            totalDiamondsText.textContent = `${totalDiamondCount.toLocaleString()}${hasSpecialItems ? ' + Starlight' : ''}`;
+            totalCoinsText.textContent = totalCoinCost.toLocaleString();
+
+            const finalPrice = totalCoinCost * pricePerCoin;
+            finalPriceTextP.textContent = `${Math.round(finalPrice).toLocaleString()} ${CURRENCY_SYMBOL}`;
+            finalPriceResultDiv.classList.remove('hidden');
+        }
+
+        function handleDiamondSelection(event) {
+            const clickedButton = event.target.closest('.diamond-btn');
+            if (!clickedButton) return; 
+
+            if (pricePerCoin === null) {
+                alert('ကျေးဇူးပြု၍ အဆင့် (၁) တွင် Coin စျေးနှုန်းကို ဦးစွာတွက်ချက်ပါ');
+                return;
+            }
+
+            selections.push({
+                id: clickedButton.dataset.id,
+                diamondDisplay: clickedButton.dataset.diamondDisplay,
+                coinCost: parseInt(clickedButton.dataset.coinCost)
+            });
+            updateUI();
+        }
+
+        function handleRemoveSelection(event) {
+            if (!event.target.classList.contains('remove-btn')) return;
+            const idToRemove = event.target.dataset.id;
+            const indexToRemove = selections.findIndex(item => item.id === idToRemove);
+            if (indexToRemove > -1) {
+                selections.splice(indexToRemove, 1);
+            }
+            updateUI();
+        }
+
+        calculateCoinRateBtn.addEventListener('click', calculateCoinRate);
+        diamondOptionsContainer.addEventListener('click', handleDiamondSelection);
+        summaryListDiv.addEventListener('click', handleRemoveSelection);
+        
+        coinPurchasePriceInput.addEventListener('keydown', (e) => e.key === 'Enter' && calculateCoinRateBtn.click());
+        numberOfCoinsInput.addEventListener('keydown', (e) => e.key === 'Enter' && calculateCoinRateBtn.click());
+    </script>
+</body>
+</html>
+
